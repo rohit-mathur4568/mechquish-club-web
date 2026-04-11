@@ -5,14 +5,14 @@
 
 @layer base {
   body {
-    /* Industrial Background Color aur Font */
+    /*  Background Color aur Font */
     @apply bg-[#0a0a0a] text-white font-sans;
     
-    /* Industrial Grid Pattern for texture */
+    /*Grid Pattern for texture */
     background-image: linear-gradient(rgba(255, 31, 31, 0.03) 1px, transparent 1px),
                       linear-gradient(90deg, rgba(255, 31, 31, 0.03) 1px, transparent 1px);
     background-size: 30px 30px;
-    background-attachment: fixed; /* Taaki grid background move na ho */
+    background-attachment: fixed; 
   }
 }
 
@@ -35,7 +35,7 @@
     }
   }
 
-  /* 2. Pulsing Glow Animation (Fix: Added missing keyframes) */
+  /* 2. Pulsing Glow Animation 
   @keyframes neon-pulse {
     from {
       box-shadow: 0 0 10px rgba(220, 38, 38, 0.2), 0 0 20px rgba(220, 38, 38, 0.1);

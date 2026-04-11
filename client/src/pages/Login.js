@@ -13,7 +13,7 @@ const Login = () => {
   const handleAuth = async (e) => {
     e.preventDefault();
 
-    // --- 🚨 CREDENTIAL VALIDATION LOGIC ---
+    //  CREDENTIAL VALIDATION LOGIC
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       alert("INVALID_ACCESS_KEY: Please enter a valid Email address! ⚠️");
@@ -71,7 +71,6 @@ const Login = () => {
           transition={{ duration: 0.4, ease: "easeOut" }}
           className="relative z-10 w-full max-w-md p-10 bg-[#121212]/85 backdrop-blur-2xl rounded-3xl border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.9)] text-center group"
         >
-            {/* 🔥 DHASU LOGO SECTION: ROTATION + GLOW 🔥 */}
             <div className="relative mb-8 flex justify-center">
                 {/* Pulsing Red Glow */}
                 <div className="absolute inset-0 bg-red-600/25 blur-3xl rounded-full animate-pulse scale-150"></div>

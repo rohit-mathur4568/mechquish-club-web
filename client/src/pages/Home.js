@@ -69,7 +69,7 @@ const Home = () => {
         </motion.div>
       </div>
 
-      {/* 3. FEATURE CARDS SECTION (Short Look) */}
+      {/* 3. FEATURE CARDS SECTION */}
       <div className="relative z-10 max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8 pb-32">
         {[
           { title: "Design", desc: "Advanced CAD & Industrial Modeling" },
