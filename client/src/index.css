@@ -1,13 +1,63 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+/* client/src/index.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    /* Industrial Background Color aur Font */
+    @apply bg-[#0a0a0a] text-white font-sans;
+    
+    /* Industrial Grid Pattern for texture */
+    background-image: linear-gradient(rgba(255, 31, 31, 0.03) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(255, 31, 31, 0.03) 1px, transparent 1px);
+    background-size: 30px 30px;
+    background-attachment: fixed; /* Taaki grid background move na ho */
+  }
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+@layer components {
+  .industrial-input {
+    @apply w-full bg-black/50 border border-gray-800 text-white p-4 rounded-xl 
+           focus:outline-none focus:border-red-600 focus:ring-1 focus:ring-red-600 
+           transition-all duration-300 placeholder:text-gray-700 font-sans;
+  }
+}
+
+@layer utilities {
+  /* 1. Continuous Rotating Animation (Gear Look) */
+  @keyframes rotate-gear {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  /* 2. Pulsing Glow Animation (Fix: Added missing keyframes) */
+  @keyframes neon-pulse {
+    from {
+      box-shadow: 0 0 10px rgba(220, 38, 38, 0.2), 0 0 20px rgba(220, 38, 38, 0.1);
+      opacity: 0.6;
+    }
+    to {
+      box-shadow: 0 0 25px rgba(220, 38, 38, 0.6), 0 0 50px rgba(220, 38, 38, 0.4);
+      opacity: 1;
+    }
+  }
+
+  /* Animation Classes */
+  .animate-gear-rotate {
+    animation: rotate-gear 10s linear infinite;
+  }
+
+  .animate-neon-pulse {
+    animation: neon-pulse 1.5s ease-in-out infinite alternate;
+  }
+
+  /* Custom Glow for Logo */
+  .shadow-neon-red {
+    box-shadow: 0 0 15px rgba(220, 38, 38, 0.5);
+  }
 }

@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const cors = ('dotenv').config();
+const cors = require('cors');
+require('dotenv').config();
 const authRoutes = require('./routes/authRoutes');
 
 const app = express();
@@ -11,9 +12,9 @@ app.use(cors());
 app.use('/api/auth' , authRoutes);
 
 //MongoDB Connection 
-maggoose.connect(process.env.MONGO_URI)
+mongoose.connect(process.env.MONGO_URI)
     .then(() => console.log("Mechquish database connected!"))
-    .catch((err) => console.log("DB connection error"));
+    .catch((err) => console.log("DB connection error:", err));
     
     //Test Route
     app.get('/',(req, res) => {
