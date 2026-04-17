@@ -1,78 +1,56 @@
-﻿# Mechquish Club Portal
+﻿# ⚙️ MechQuish Club Management Portal
 
 Welcome to the **MechQuish Club Management Portal**, a centralized web application built to digitize, streamline, and manage the complete workflow of the college technical club. From event planning and QR-based attendance to secure judge scoring and media galleries, this portal ensures transparent and paperless club operations.
-
-## 📖 Project Overview
-The MechQuish Portal eliminates manual spreadsheets and physical registers. It provides a secure, role-based environment where students can register for activities, organizers can manage crowds using QR codes, and judges can evaluate participants seamlessly via a locked scoring panel.
 
 ---
 
 ## 🚀 Key Features
 
-* **Role-Based Access Control (RBAC):** Secure login routing ensuring users only access dashboards meant for their specific roles (No self-registration; all accounts are centrally managed).
-* **Dynamic Activity Lifecycle:** Events are systematically categorized into:
-  * *Planned:* Upcoming events with downloadable roadmaps.
-  * *Current:* Live events with active QR scanning and scoring.
-  * *Previous:* Archived events showcasing past winners and records.
-* **Judges Scoring & Lock Mechanism:** A specialized tablet-friendly interface for event judges. Once marks are submitted and "Locked", the inputs are disabled to prevent data tampering.
-* **Smart QR Attendance:** Every registered student gets a unique QR code on their dashboard. Organizers can scan these at the venue for instant, zero-touch attendance tracking.
-* **Socially (Gallery):** A dedicated media hub where the MechQuish admin team can upload event images and videos to keep the student community engaged.
+* **Role-Based Access Control (RBAC):** Secure login routing for Admin, Organisers, Judges, and Students.
+* **Dynamic Activity Lifecycle:** Manage Events in three stages: *Planned*, *Live*, and *Completed*.
+* **Judges Scoring System:** Specialized tablet-friendly interface for evaluations with a "Lock" mechanism.
+* **Smart QR Attendance:** Unique QR code generation for every student for zero-touch attendance.
+* **Tech Asset Management:** Tracking club equipment (Kits, Drones, Sensors) issued to members.
 
 ---
 
 ## 👥 User Roles & Permissions
 
-The system operates on a strict hierarchy to maintain data integrity:
-
 | Role | Access Level & Responsibilities |
 | :--- | :--- |
-| **Superadmin** | Full system control. Manages all user accounts, overrides settings, and oversees data. |
-| **Admin** | Manages the MechQuish organizing team and monitors overall event execution. |
-| **Organiser** | Creates activity plans, scans student QR codes, and marks event winners. |
-| **Faculty** | Read-only access to monitor club reports, activities, and overall transparency. |
-| **Student** | Views the activity timeline, accesses their personal QR code, and checks results. |
+| **Admin** | Full system control, Member registration, and Global configurations. |
+| **Organiser** | Event creation, QR scanning for attendance, and winner management. |
+| **Judge** | Secure scoring panel for live technical evaluations. |
+| **Student** | Accessing event timeline, personal QR code, and result tracking. |
 
 ---
 
 ## 💻 Tech Stack
 
-This project is built using the robust **MERN Stack**:
-* **Frontend:** React.js, React Router DOM, Tailwind CSS (for modern, responsive UI)
+This project is built using the **MERN Stack**:
+* **Frontend:** React.js, Tailwind CSS, Framer Motion
 * **Backend:** Node.js, Express.js
-* **Database:** MongoDB Atlas, Mongoose (ODM)
-* **Security & Auth:** JSON Web Tokens (JWT), Bcrypt.js (Password Hashing)
+* **Database:** MongoDB Atlas
+* **Security:** JWT (JSON Web Tokens) & Bcrypt Password Hashing
 
 ---
 
 ## ⚙️ Local Setup & Installation
 
-To run this project locally on your machine, follow these steps:
-
 **1. Clone the repository**
 ```bash
-git clone [https://github.com/your-username/mechquish-club.git](https://github.com/your-username/mechquish-club.git)
-cd mechquish-club
-2. Setup the Backend (Server)
+git clone [https://github.com/rohit-mathur4568/mechquish-club-web.git](https://github.com/rohit-mathur4568/mechquish-club-web.git)
+cd mechquish-club-web
+2. Setup the Backend
 
 Bash
 cd server
 npm install
-Create a .env file in the server directory and add the following variables:
-
-Code snippet
-MONGO_URI=your_mongodb_atlas_connection_string
-JWT_SECRET=your_secret_key
-PORT=5000
-Start the backend server:
-
-Bash
+# Create a .env file with MONGO_URI and JWT_SECRET
 npm run dev
-3. Setup the Frontend (Client)
-Open a new terminal window:
+3. Setup the Frontend
 
 Bash
 cd client
 npm install
 npm start
-4. Access the Portal
-Open your browser and navigate to http://localhost:3000.
