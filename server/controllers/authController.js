@@ -28,21 +28,37 @@ exports.register = async (req, res) => {
 exports.login = async (req, res) => {
     try {
         const { email, password } = req.body;
+        
+        // Find user by email
         const user = await User.findOne({ email });
         if (!user) return res.status(400).json({ msg: "Invalid Credentials" });
 
+        // Verify Password
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) return res.status(400).json({ msg: "Invalid Credentials" });
 
-        // Create JWT Token 
+        // NEW SECURITY CHECK: Admin Approval
+        // Check if the user is approved by the admin before issuing a token
+        if (!user.isApproved) {
+            return res.status(403).json({ 
+                msg: "Your account is pending approval from the Admin. Please wait for authorization." 
+            });
+        }
+
+        // Create JWT Token (Only if approved)
         const token = jwt.sign(
             { id: user._id, role: user.role }, 
             process.env.JWT_SECRET, 
             { expiresIn: '1h' }
         );
 
-        res.json({ token, user: { id: user._id, name: user.name, role: user.role } });
+        res.json({ 
+            token, 
+            user: { id: user._id, name: user.name, role: user.role } 
+        });
+
     } catch (err) {
+        console.error(err.message);
         res.status(500).send("Server Error");
     }
 };

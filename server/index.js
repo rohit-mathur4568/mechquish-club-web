@@ -19,8 +19,9 @@ app.use(express.json());
 
 //  API Routes (Auth and more)
 app.use('/api/auth', require('./routes/auth'));
+app.use('/api/admin', require('./routes/admin'));
 
-// Home Route (Testing ke liye)
+// Home Route 
 app.get('/', (req, res) => {
     res.send("MechQuish API is running... ");
 });

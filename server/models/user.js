@@ -11,6 +11,13 @@ const userSchema = new mongoose.Schema({
     },
     branch: { type: String },
     year: { type: Number },
+    
+    // This ensures a user cannot log in until an admin verifies them
+    isApproved: { 
+        type: Boolean, 
+        default: false 
+    }, 
+
     createdAt: { type: Date, default: Date.now }
 });
 
