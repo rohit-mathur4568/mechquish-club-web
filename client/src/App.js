@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar'; 
 import Home from './pages/Home';
 import Login from './pages/Login';
+import Register from './pages/Register'; 
 import AdminDashboard from './pages/AdminDashboard';
 
 function App() {
@@ -16,8 +17,8 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
           
-          {/* Dashboard Route - We will later protect this with Auth logic */}
           <Route path="/admin-dashboard" element={<AdminDashboard />} />
         </Routes>
         

@@ -11,7 +11,7 @@ const Login = () => {
   const handleAuth = async (e) => {
     e.preventDefault();
 
-    // 🛡️ CREDENTIAL VALIDATION LOGIC
+    //  CREDENTIAL VALIDATION LOGIC
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       alert("INVALID_ACCESS_KEY: Please enter a valid Email address! ⚠️");
@@ -23,14 +23,14 @@ const Login = () => {
     }
 
     try {
-      // ✅ Real Backend Logic (Agar Atlas connect ho gaya hai toh)
+      //  Real Backend Logic (If Atlas is connected)
       const res = await axios.post(`http://localhost:5000/api/auth/login`, { email, password });
       
       localStorage.setItem('token', res.data.token);
       localStorage.setItem('role', res.data.user.role);
       alert("SYSTEM_AUTHORIZED: Session Activated! 🚀");
       
-      // Role ke hisab se redirection
+      // Role based  redirection
       if (res.data.user.role === 'Admin' || res.data.user.role === 'Superadmin') {
         navigate('/admin-dashboard');
       } else {
@@ -38,7 +38,7 @@ const Login = () => {
       }
       
     } catch (err) {
-      // ⚠️ Temporary MOCK LOGIN (Agar backend band hai ya error aa raha hai)
+      // ⚠️ Temporary MOCK LOGIN (if backend is off)
       console.log("Backend failed, using Mock Login for testing");
       if (email === 'admin@college.com' && password === 'admin123') {
           localStorage.setItem('user', JSON.stringify({ name: 'Rohit', role: 'Superadmin' }));
@@ -116,7 +116,20 @@ const Login = () => {
           </button>
         </form>
 
-        <div className="mt-10 pt-6 border-t border-white/5 text-center">
+        {/* User Registration Link */}
+        <div className="mt-6 text-center">
+          <p className="text-gray-500 text-[11px] font-bold font-tech uppercase">
+            No active credentials?{' '}
+            <button 
+              onClick={() => navigate('/register')} 
+              className="text-red-500 hover:text-red-400 tracking-widest transition-colors ml-1"
+            >
+              Request Access
+            </button>
+          </p>
+        </div>
+
+        <div className="mt-6 pt-6 border-t border-white/5 text-center">
           <p className="text-gray-500 text-[10px] uppercase tracking-[0.1em] font-bold font-tech">
               UNAUTHORIZED ACCESS IS STRICTLY PROHIBITED
           </p>

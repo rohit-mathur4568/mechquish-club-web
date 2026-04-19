@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom'; // Added for navigation
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState('DASHBOARD');
+  const navigate = useNavigate(); // Initialize navigation
   
   // State for activity creation form
   const [title, setTitle] = useState('');
@@ -31,6 +33,14 @@ const AdminDashboard = () => {
       setTitle(''); setDescription('');
     } catch (err) {
       alert("Error creating event");
+    }
+  };
+
+  // Secure logout logic
+  const handleLogout = () => {
+    if (window.confirm("SYSTEM_WARNING: Are you sure you want to terminate the secure session?")) {
+      localStorage.clear(); // Clear the saved token and role
+      navigate('/login'); // Redirect to login page
     }
   };
 
@@ -64,7 +74,13 @@ const AdminDashboard = () => {
         </nav>
 
         <div className="p-6 border-t border-white/5">
-          <button className="w-full py-2 bg-white/5 text-gray-400 text-[10px] font-bold uppercase hover:bg-red-600 hover:text-white transition-all rounded-lg">Logout</button>
+          {/* Updated Logout Button */}
+          <button 
+            onClick={handleLogout} 
+            className="w-full py-2 bg-white/5 text-gray-400 text-[10px] font-bold uppercase hover:bg-red-600 hover:text-white transition-all rounded-lg shadow-lg hover:shadow-red-600/40 active:scale-95"
+          >
+            Logout
+          </button>
         </div>
       </aside>
 
