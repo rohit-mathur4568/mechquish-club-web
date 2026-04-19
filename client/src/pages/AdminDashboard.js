@@ -1,24 +1,14 @@
-import React, { useState, useEffect } from 'react'; 
+import React, { useState } from 'react';
 import axios from 'axios';
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState('DASHBOARD');
-
-  // ESLint instruction to ignore unused variable during build
-  // eslint-disable-next-line no-unused-vars
-  const [activities, setActivities] = useState([]);
   
   // State for activity creation form
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [type, setType] = useState('Technical Workshop');
   const [targetBranch, setTargetBranch] = useState('All Branches');
-
-  // ESLint instruction to ignore unused effect during build
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => {
-    // This is defined but currently empty to satisfy Vercel warnings
-  }, []);
 
   // Operational metrics for dashboard overview
   const stats = [
