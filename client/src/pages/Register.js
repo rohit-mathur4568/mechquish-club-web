@@ -14,6 +14,9 @@ const Register = () => {
     password: ''
   });
 
+  // State to toggle password visibility
+  const [showPassword, setShowPassword] = useState(false);
+
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -23,14 +26,14 @@ const Register = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
 
-    //  NAME VALIDATION
+    // NAME VALIDATION
     const nameRegex = /^[A-Za-z\s]+$/;
     if (!nameRegex.test(formData.fullName)) {
       alert("INVALID_FORMAT: Full Name must contain only alphabets. Numbers and special characters are not allowed! ⚠️");
       return;
     }
 
-    //  EMAIL VALIDATION 
+    // EMAIL VALIDATION 
     const emailRegex = /^[A-Za-z][A-Za-z0-9._%+-]*@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
     if (!emailRegex.test(formData.email)) {
       alert("INVALID_EMAIL: Email must start with a letter and follow standard format (e.g., student@domain.com)! ⚠️");
@@ -44,7 +47,7 @@ const Register = () => {
       return;
     }
 
-    //  PASSWORD VALIDATION 
+    // PASSWORD VALIDATION 
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     if (!passwordRegex.test(formData.password)) {
       alert("WEAK_CREDENTIALS: Password must be at least 8 characters long, including an uppercase letter, a number, and a special character! ⚠️");
@@ -143,10 +146,24 @@ const Register = () => {
 
           <div className="space-y-1 md:col-span-2">
               <label className="text-[10px] text-gray-400 ml-2 uppercase font-bold tracking-widest font-tech">Security_Password</label>
-              <input 
-                  type="password" name="password" placeholder="Min 8 chars, 1 Uppercase, 1 Number, 1 Special Char" value={formData.password} onChange={handleChange} required 
-                  className="w-full bg-black/50 border border-white/5 text-white p-4 rounded-xl focus:outline-none focus:border-red-600 transition-all placeholder:text-gray-700 font-tech"
-              />
+              <div className="relative">
+                  <input 
+                      type={showPassword ? "text" : "password"} 
+                      name="password" 
+                      placeholder="Min 8 chars, 1 Uppercase, 1 Number, 1 Special Char" 
+                      value={formData.password} 
+                      onChange={handleChange} 
+                      required 
+                      className="w-full bg-black/50 border border-white/5 text-white p-4 pr-16 rounded-xl focus:outline-none focus:border-red-600 transition-all placeholder:text-gray-700 font-tech"
+                  />
+                  <button 
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-[10px] text-gray-400 hover:text-red-500 font-bold uppercase tracking-widest transition-colors font-tech"
+                  >
+                      {showPassword ? "HIDE" : "SHOW"}
+                  </button>
+              </div>
           </div>
 
           <button 

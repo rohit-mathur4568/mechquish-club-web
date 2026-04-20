@@ -5,6 +5,7 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register'; 
 import AdminDashboard from './pages/AdminDashboard';
+import StudentDashboard from './pages/StudentDashboard';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           
           <Route path="/admin-dashboard" element={<AdminDashboard />} />
+          <Route path="/dashboard" element={<StudentDashboard />} />
         </Routes>
         
       </div>
