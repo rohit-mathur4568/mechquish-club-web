@@ -6,6 +6,7 @@ import Login from './pages/Login';
 import Register from './pages/Register'; 
 import AdminDashboard from './pages/AdminDashboard';
 import StudentDashboard from './pages/StudentDashboard';
+import Developers from './pages/Developers';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           
           <Route path="/admin-dashboard" element={<AdminDashboard />} />
           <Route path="/dashboard" element={<StudentDashboard />} />
+          <Route path="/developers" element={<Developers />} />
         </Routes>
         
       </div>
