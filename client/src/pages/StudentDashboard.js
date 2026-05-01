@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { QRCodeSVG } from 'qrcode.react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -116,6 +116,14 @@ const StudentDashboard = () => {
         </nav>
 
         <div className="p-6">
+
+          <Link 
+            to="/" 
+            className="w-full py-3.5 bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white border border-white/5 text-sm font-medium rounded-xl transition-all duration-200 flex justify-center items-center gap-2 shadow-lg"
+          >
+            <span>🏠</span> Back to Home
+          </Link>
+          
           <button 
             onClick={handleLogout} 
             className="w-full py-3.5 bg-white/5 hover:bg-red-500/10 text-gray-400 hover:text-red-500 text-sm font-medium rounded-xl transition-all duration-200 flex justify-center items-center gap-2"

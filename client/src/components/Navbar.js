@@ -7,14 +7,33 @@ const Navbar = () => {
   const location = useLocation(); 
   const [scrolled, setScrolled] = useState(false);
 
-  // Scroll effect logic (Navbar becomes glassmorphic on scroll)
+  //  HIDE NAVBAR ON DASHBOARDS
+  // If the user is on any of these routes, this number will not be displayed
+  const dashboardRoutes = ['/dashboard', '/student-dashboard', '/admin-dashboard'];
+
+  // Checking if the current URL is the dashboard URL
+  const isDashboardRoute = dashboardRoutes.some(route => location.pathname.includes(route));
+
+  // Scroll effect logic
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
+    const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+// If on dashboard, silently return "null" (navbar will be hidden)
+  if (isDashboardRoute) {
+    return null;
+  }
+
+  // MAGIC FIX 2: CORRECT DASHBOARD ROUTE
+// We'll check what the correct dashboard link should be.  
+  let dashboardLink = "/dashboard"; 
+  if (loggedInUser && loggedInUser.role === 'Admin') {
+    dashboardLink = "/admin-dashboard";
+  } else if (loggedInUser && loggedInUser.role === 'StudentDashboard ') {
+    dashboardLink = "/dashboard"; 
+  }
 
   const navLinks = [
     { name: 'Home', path: '/' },
@@ -22,7 +41,6 @@ const Navbar = () => {
     { name: 'Gallery', path: '/gallery' }
   ];
 
-  // Developer Team Data
   const developers = [
     { name: "Rohit Mathur", role: "Full Stack Architect", img: "https://api.dicebear.com/7.x/notionists/svg?seed=Rohit&backgroundColor=dc2626" },
     { name: "Anjali Tiwari", role: "Technical Lead", img: "https://api.dicebear.com/7.x/notionists/svg?seed=Anjali&backgroundColor=6366f1" },
@@ -73,16 +91,15 @@ const Navbar = () => {
           ))}
         </div>
 
-        {/* --- DEVS DROPDOWN (The VIP Flex 💪) --- */}
+        {/* --- DEVS DROPDOWN --- */}
         <div className="relative group hidden sm:flex items-center cursor-pointer">
           <Link to="/developers" className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-sm font-bold tracking-widest uppercase">
-    <span className="text-lg">💻</span>
-    <span>Dev Team</span>
-  </Link>
+            <span className="text-lg">💻</span>
+            <span>Dev Team</span>
+          </Link>
           
-          {/* Glowing Glass Card (Shows on Hover) */}
+          {/* Glowing Glass Card */}
           <div className="absolute top-full right-0 mt-6 w-72 bg-[#0a0a0f]/95 backdrop-blur-3xl border border-white/10 rounded-2xl p-5 shadow-[0_10px_40px_rgba(220,38,38,0.15)] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top-right scale-95 group-hover:scale-100">
-            {/* Pointer arrow top right */}
             <div className="absolute -top-2 right-8 w-4 h-4 bg-[#0a0a0f] border-t border-l border-white/10 transform rotate-45"></div>
             
             <p className="text-[10px] text-red-500 font-black tracking-[0.2em] uppercase mb-4 border-b border-white/10 pb-2 flex items-center justify-between">
@@ -93,11 +110,7 @@ const Navbar = () => {
             <div className="flex flex-col gap-4">
               {developers.map((dev, index) => (
                 <div key={index} className="flex items-center gap-4 hover:bg-white/5 p-2 rounded-xl transition-colors">
-                  <img 
-                    src={dev.img} 
-                    alt={dev.name} 
-                    className="w-10 h-10 rounded-full border border-white/20 shadow-lg object-cover" 
-                  />
+                  <img src={dev.img} alt={dev.name} className="w-10 h-10 rounded-full border border-white/20 shadow-lg object-cover" />
                   <div className="flex flex-col">
                     <span className="text-sm text-white font-bold">{dev.name}</span>
                     <span className="text-[10px] text-gray-400 uppercase tracking-wider">{dev.role}</span>
@@ -108,13 +121,12 @@ const Navbar = () => {
           </div>
         </div>
         
-        {/* Vertical Divider */}
         <div className="w-[1px] h-6 bg-white/20 hidden md:block"></div>
 
-        {/* ================= LOGIN / DASHBOARD BUTTON ================= */}
+        {/* ================= DYNAMIC DASHBOARD/LOGIN BUTTON ================= */}
         {loggedInUser ? (
           <Link 
-            to={loggedInUser.role === 'Admin' ? "/admin-dashboard" : "/student-dashboard"} 
+            to={dashboardLink} 
             className="relative overflow-hidden px-6 py-2.5 rounded-full bg-red-600/10 text-red-500 font-bold text-sm tracking-wide border border-red-600/50 hover:bg-red-600 hover:text-white transition-all shadow-[0_0_15px_rgba(220,38,38,0.2)] hover:shadow-[0_0_30px_rgba(220,38,38,0.6)] group"
           >
             <span className="relative z-10">Dashboard</span>
