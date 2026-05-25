@@ -69,12 +69,10 @@ const Developers = () => {
   return (
     <div className="min-h-screen bg-[#05050a] text-white font-sans overflow-x-hidden selection:bg-red-500/30 pt-24 pb-12 relative">
       
-      {/* Lag-Free Static Background Orb (Using Radial Gradient instead of Blur) */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-[500px] bg-[radial-gradient(ellipse_at_top,rgba(153,27,27,0.15)_0%,transparent_70%)] pointer-events-none z-0"></div>
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         
-        {/* Header Section */}
         <div className="text-center mb-20">
           <motion.div 
             initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}
@@ -97,7 +95,6 @@ const Developers = () => {
           </motion.p>
         </div>
 
-        {/* Developer Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {team.map((dev, index) => (
             <motion.div 
@@ -108,10 +105,8 @@ const Developers = () => {
               whileHover={{ y: -10 }}
               className={`bg-[#0a0a0f]/80 backdrop-blur-xl border border-white/10 ${dev.theme.border} rounded-[2rem] p-8 shadow-2xl ${dev.theme.shadow} transition-all duration-300 group relative overflow-hidden transform-gpu`}
             >
-              {/* No-Lag Card Glow Background (Radial Gradient) */}
               <div className={`absolute -top-20 -right-20 w-64 h-64 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] ${dev.theme.glowBg} rounded-full opacity-30 group-hover:opacity-60 transition-opacity duration-500 pointer-events-none`}></div>
 
-              {/* Profile Image (Big Size is Back!) */}
               <div className="relative w-24 h-24 mb-6">
                 <div className={`absolute inset-0 rounded-full border border-white/20 scale-110 group-hover:scale-125 transition-transform duration-500 ${dev.theme.ring}`}></div>
                 <img src={dev.img} alt={dev.name} className="relative z-10 w-full h-full rounded-full object-cover border-2 border-[#0a0a0f] shadow-xl transition-all" />
@@ -120,7 +115,6 @@ const Developers = () => {
                 </div>
               </div>
 
-              {/* Name & Role */}
               <h2 className="text-2xl font-bold text-white mb-1 relative z-10">{dev.name}</h2>
               <h3 className={`text-xs font-black uppercase tracking-widest ${dev.theme.text} mb-2 relative z-10`}>{dev.role}</h3>
               <p className="text-[10px] text-gray-500 uppercase tracking-widest font-bold mb-6 relative z-10">AKA: "{dev.aka}"</p>
@@ -129,7 +123,6 @@ const Developers = () => {
                 {dev.bio}
               </p>
 
-              {/* Contributions Section */}
               <div className="border-t border-white/10 pt-6 relative z-10">
                 <p className="text-[10px] text-gray-500 uppercase tracking-[0.2em] font-bold mb-4">Key Contributions</p>
                 <ul className="space-y-3">
@@ -144,22 +137,6 @@ const Developers = () => {
             </motion.div>
           ))}
         </div>
-
-        {/* Tech Arsenal Section */}
-        <motion.div 
-          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1, delay: 1 }}
-          className="mt-32 text-center border-t border-white/10 pt-16"
-        >
-          <p className="text-[10px] text-gray-500 uppercase tracking-[0.3em] font-bold mb-8">The Tech Arsenal Used</p>
-          <div className="flex flex-wrap justify-center gap-6">
-            {['MongoDB', 'Express.js', 'React.js', 'Node.js', 'Tailwind CSS', 'Framer Motion'].map((tech, i) => (
-              <span key={i} className="px-5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-sm font-medium text-gray-300 hover:bg-white/10 hover:border-white/20 transition-all cursor-default shadow-lg hover:-translate-y-1">
-                {tech}
-              </span>
-            ))}
-          </div>
-        </motion.div>
-
       </div>
     </div>
   );
