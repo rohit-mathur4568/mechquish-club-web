@@ -6,31 +6,36 @@ import { motion } from 'framer-motion';
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  
+  // State to toggle password visibility
+  const [showPassword, setShowPassword] = useState(false);
+  
   const navigate = useNavigate();
 
   const handleAuth = async (e) => {
     e.preventDefault();
 
-    // 🛡️ CREDENTIAL VALIDATION LOGIC
+    // CREDENTIAL VALIDATION LOGIC
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      alert("INVALID_ACCESS_KEY: Please enter a valid Email address! ⚠️");
+      alert("INVALID_ACCESS_KEY: Please enter a valid Email address!");
       return;
     }
     if (password.length < 6) {
-      alert("SECURITY_PROTOCOL_ERROR: Password must be at least 6 characters! ⚠️");
+      alert("SECURITY_PROTOCOL_ERROR: Password must be at least 6 characters!");
       return;
     }
 
     try {
-      // ✅ Real Backend Logic (Agar Atlas connect ho gaya hai toh)
+      // Real Backend Logic (If Atlas is connected)
       const res = await axios.post(`http://localhost:5000/api/auth/login`, { email, password });
       
-      localStorage.setItem('token', res.data.token);
-      localStorage.setItem('role', res.data.user.role);
-      alert("SYSTEM_AUTHORIZED: Session Activated! 🚀");
+    localStorage.setItem('token', res.data.token);
+    localStorage.setItem('role', res.data.user.role);
+    localStorage.setItem('user', JSON.stringify(res.data.user)); 
+    alert("SYSTEM_AUTHORIZED: Session Activated!");
       
-      // Role ke hisab se redirection
+      // Role based redirection
       if (res.data.user.role === 'Admin' || res.data.user.role === 'Superadmin') {
         navigate('/admin-dashboard');
       } else {
@@ -38,7 +43,7 @@ const Login = () => {
       }
       
     } catch (err) {
-      // ⚠️ Temporary MOCK LOGIN (Agar backend band hai ya error aa raha hai)
+      // Temporary MOCK LOGIN (if backend is off)
       console.log("Backend failed, using Mock Login for testing");
       if (email === 'admin@college.com' && password === 'admin123') {
           localStorage.setItem('user', JSON.stringify({ name: 'Rohit', role: 'Superadmin' }));
@@ -47,7 +52,7 @@ const Login = () => {
           localStorage.setItem('user', JSON.stringify({ name: 'Rahul', role: 'Student' }));
           navigate('/dashboard');
       } else {
-          alert(err.response?.data?.message || "ACCESS_DENIED: Invalid Credentials!");
+          alert(err.response?.data?.msg || "ACCESS_DENIED: Invalid Credentials!");
       }
     }
   };
@@ -99,13 +104,25 @@ const Login = () => {
               />
           </div>
 
+          {/* Password Field with Show/Hide functionality */}
           <div className="space-y-1">
               <label className="text-[10px] text-gray-400 ml-2 uppercase font-bold tracking-widest font-tech">Security_Password</label>
-              <input 
-                  type="password" placeholder="••••••••" value={password}
-                  onChange={(e) => setPassword(e.target.value)} required 
-                  className="w-full bg-black/50 border border-white/5 text-white p-4 rounded-xl focus:outline-none focus:border-red-600 transition-all placeholder:text-gray-700 font-tech"
-              />
+              <div className="relative">
+                  <input 
+                      type={showPassword ? "text" : "password"} 
+                      placeholder="••••••••" 
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)} required 
+                      className="w-full bg-black/50 border border-white/5 text-white p-4 pr-16 rounded-xl focus:outline-none focus:border-red-600 transition-all placeholder:text-gray-700 font-tech"
+                  />
+                  <button 
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-[10px] text-gray-400 hover:text-red-500 font-bold uppercase tracking-widest transition-colors font-tech"
+                  >
+                      {showPassword ? "HIDE" : "SHOW"}
+                  </button>
+              </div>
           </div>
 
           <button 
@@ -116,7 +133,20 @@ const Login = () => {
           </button>
         </form>
 
-        <div className="mt-10 pt-6 border-t border-white/5 text-center">
+        {/* User Registration Link */}
+        <div className="mt-6 text-center">
+          <p className="text-gray-500 text-[11px] font-bold font-tech uppercase">
+            No active credentials?{' '}
+            <button 
+              onClick={() => navigate('/register')} 
+              className="text-red-500 hover:text-red-400 tracking-widest transition-colors ml-1"
+            >
+              Request Access
+            </button>
+          </p>
+        </div>
+
+        <div className="mt-6 pt-6 border-t border-white/5 text-center">
           <p className="text-gray-500 text-[10px] uppercase tracking-[0.1em] font-bold font-tech">
               UNAUTHORIZED ACCESS IS STRICTLY PROHIBITED
           </p>

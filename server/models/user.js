@@ -1,8 +1,10 @@
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
-    name: { type: String, required: true },
+    fullName: { type: String, required: true },
     email: { type: String, unique: true, required: true },
+    mobile: { type: String, required: true },
+    studentClass: { type: String, required: true },
     password: { type: String, required: true },
     role: {
         type: String,
@@ -11,6 +13,14 @@ const userSchema = new mongoose.Schema({
     },
     branch: { type: String },
     year: { type: Number },
+    
+    // Admin approval check
+    isApproved: { type: Boolean, default: false }, 
+
+    //  Email Verification Fields
+    isEmailVerified: { type: Boolean, default: false },
+    verificationToken: { type: String },
+
     createdAt: { type: Date, default: Date.now }
 });
 
