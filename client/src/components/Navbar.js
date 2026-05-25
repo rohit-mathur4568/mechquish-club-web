@@ -1,33 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
+//  1. IMPORTING CENTRAL DATA 
+import { devTeamData } from '../Data/devData'; 
 
 const Navbar = () => {
   const loggedInUser = JSON.parse(localStorage.getItem('user'));
   const location = useLocation(); 
   const [scrolled, setScrolled] = useState(false);
 
-  //  HIDE NAVBAR ON DASHBOARDS
-  // If the user is on any of these routes, this number will not be displayed
+  // HIDE NAVBAR ON DASHBOARDS
   const dashboardRoutes = ['/dashboard', '/student-dashboard', '/admin-dashboard'];
-
-  // Checking if the current URL is the dashboard URL
   const isDashboardRoute = dashboardRoutes.some(route => location.pathname.includes(route));
 
-  // Scroll effect logic
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-// If on dashboard, silently return "null" (navbar will be hidden)
   if (isDashboardRoute) {
     return null;
   }
 
-  // MAGIC FIX 2: CORRECT DASHBOARD ROUTE
-// We'll check what the correct dashboard link should be.  
   let dashboardLink = "/dashboard"; 
   if (loggedInUser && loggedInUser.role === 'Admin') {
     dashboardLink = "/admin-dashboard";
@@ -41,11 +36,6 @@ const Navbar = () => {
     { name: 'Gallery', path: '/gallery' }
   ];
 
-  const developers = [
-    { name: "Rohit Mathur", role: "Full Stack Architect", img: "https://api.dicebear.com/7.x/notionists/svg?seed=Rohit&backgroundColor=dc2626" },
-    { name: "Anjali Tiwari", role: "Technical Lead", img: "https://api.dicebear.com/7.x/notionists/svg?seed=Anjali&backgroundColor=6366f1" },
-    { name: "Shristi Raghav", role: "UI/UX & Logic", img: "https://api.dicebear.com/7.x/notionists/svg?seed=Shristi&backgroundColor=d946ef" }
-  ];
 
   return (
     <motion.nav 
@@ -98,7 +88,6 @@ const Navbar = () => {
             <span>Dev Team</span>
           </Link>
           
-          {/* Glowing Glass Card */}
           <div className="absolute top-full right-0 mt-6 w-72 bg-[#0a0a0f]/95 backdrop-blur-3xl border border-white/10 rounded-2xl p-5 shadow-[0_10px_40px_rgba(220,38,38,0.15)] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top-right scale-95 group-hover:scale-100">
             <div className="absolute -top-2 right-8 w-4 h-4 bg-[#0a0a0f] border-t border-l border-white/10 transform rotate-45"></div>
             
@@ -108,7 +97,8 @@ const Navbar = () => {
             </p>
             
             <div className="flex flex-col gap-4">
-              {developers.map((dev, index) => (
+              {/*3. USING CENTRAL DATA HERE */}
+              {devTeamData.map((dev, index) => (
                 <div key={index} className="flex items-center gap-4 hover:bg-white/5 p-2 rounded-xl transition-colors">
                   <img src={dev.img} alt={dev.name} className="w-10 h-10 rounded-full border border-white/20 shadow-lg object-cover" />
                   <div className="flex flex-col">
