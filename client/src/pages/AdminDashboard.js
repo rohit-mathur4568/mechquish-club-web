@@ -16,6 +16,7 @@ const AdminDashboard = () => {
   // ================= STATE: TEAM CMS =================
   const [members, setMembers] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [editId, setEditId] = useState(null); // Track which member is being edited
   const [formData, setFormData] = useState({
     name: '', role: '', category: 'CoreTeam', description: '', image: ''
   });
@@ -54,15 +55,28 @@ const AdminDashboard = () => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onloadend = () => {
-        setFormData({ ...formData, image: reader.result }); // Save Base64 string
+        setFormData({ ...formData, image: reader.result }); 
       };
     }
   };
 
+  // Triggered when Edit button is clicked
+  const handleEditClick = (member) => {
+    setFormData({
+      name: member.name,
+      role: member.role,
+      category: member.category || 'CoreTeam',
+      description: member.description || '',
+      image: member.image || ''
+    });
+    setEditId(member._id);
+    window.scrollTo({ top: 0, behavior: 'smooth' }); // Smooth scroll to top form
+  };
+
+  // UPDATED FUNCTION: Handles both Add and Update
   const handleAddMember = async (e) => {
     e.preventDefault();
     
-    // Validate if mandatory fields are filled
     if (!formData.name || !formData.role) {
       alert("Name and Role are mandatory fields!");
       return;
@@ -71,21 +85,27 @@ const AdminDashboard = () => {
     setLoading(true);
 
     try {
-      // Send POST request to backend 
-      const response = await axios.post('http://localhost:5000/api/members/add', formData);
-      
-      if(response.status === 201) {
-          setFormData({ name: '', role: '', category: 'CoreTeam', description: '', image: '' });
-          fetchMembers(); // Refresh the list automatically
-          alert("Member successfully added to the database! 🔥");
+      if (editId) {
+        // UPDATE EXISTING MEMBER
+        await axios.put(`http://localhost:5000/api/members/update/${editId}`, formData);
+        alert("Member successfully UPDATED! ✏️");
+      } else {
+        // ADD NEW MEMBER
+        await axios.post('http://localhost:5000/api/members/add', formData);
+        alert("Member successfully ADDED to the database! 🔥");
       }
+      
+      // Reset form and states
+      setFormData({ name: '', role: '', category: 'CoreTeam', description: '', image: '' });
+      setEditId(null);
+      fetchMembers(); 
     } catch (error) {
       if (error.response) {
         alert(`Error: ${error.response.data.message || error.response.statusText}`);
       } else {
         alert("Server not responding. Please check if your backend is running.");
       }
-      console.error("Add Member Error:", error);
+      console.error("Submit Error:", error);
     } finally {
       setLoading(false);
     }
@@ -95,7 +115,7 @@ const AdminDashboard = () => {
     if (window.confirm("SYSTEM WARNING: Are you sure you want to permanently delete this member?")) {
       try {
         await axios.delete(`http://localhost:5000/api/members/${id}`);
-        fetchMembers(); // Refresh the list after deletion
+        fetchMembers(); 
       } catch (error) {
         alert("Error occurred while deleting the member.");
         console.error("Delete Error:", error);
@@ -216,7 +236,9 @@ const AdminDashboard = () => {
               
               {/* Form Section */}
               <div className="bg-[#0d0d0d] border border-white/10 p-8 rounded-2xl shadow-xl h-fit">
-                <h3 className="text-xl font-bold text-white uppercase mb-6 italic tracking-tight border-b border-white/5 pb-4">Inject New Member</h3>
+                <h3 className="text-xl font-bold text-white uppercase mb-6 italic tracking-tight border-b border-white/5 pb-4">
+                  {editId ? 'Update Member Profile' : 'Inject New Member'}
+                </h3>
                 <form onSubmit={handleAddMember} className="space-y-4">
                   <div>
                     <label className="text-[10px] text-gray-500 uppercase font-bold ml-1 mb-1 block">Full Name</label>
@@ -262,9 +284,18 @@ const AdminDashboard = () => {
                     </motion.div>
                   )}
 
-                  <button type="submit" disabled={loading} className="w-full bg-red-600 text-white font-bold py-4 rounded-xl uppercase tracking-widest text-xs hover:bg-red-700 transition-all shadow-lg mt-2 disabled:opacity-50">
-                    {loading ? 'Processing...' : 'Upload to Database'}
-                  </button>
+                  <div className="flex gap-4 mt-2">
+                    <button type="submit" disabled={loading} className="w-full bg-red-600 text-white font-bold py-4 rounded-xl uppercase tracking-widest text-xs hover:bg-red-700 transition-all shadow-lg disabled:opacity-50">
+                      {loading ? 'Processing...' : (editId ? 'Update Member Data' : 'Upload to Database')}
+                    </button>
+                    
+                    {/* Cancel Edit Button */}
+                    {editId && (
+                      <button type="button" onClick={() => { setEditId(null); setFormData({ name: '', role: '', category: 'CoreTeam', description: '', image: '' }); }} className="px-6 bg-gray-800 text-white font-bold rounded-xl uppercase tracking-widest text-xs hover:bg-gray-700 transition-all">
+                        Cancel
+                      </button>
+                    )}
+                  </div>
                 </form>
               </div>
 
@@ -293,7 +324,11 @@ const AdminDashboard = () => {
                             <p className="text-[9px] text-red-500 uppercase tracking-widest">{teacher.role}</p>
                           </div>
                         </div>
-                        <button onClick={() => handleDeleteMember(teacher._id)} className="text-[10px] text-gray-600 hover:text-red-500 font-bold uppercase transition-colors">Delete</button>
+                        <div className="flex gap-2">
+                          <button onClick={() => handleEditClick(teacher)} className="text-[10px] text-blue-500 hover:text-blue-400 font-bold uppercase transition-colors">Edit</button>
+                          <span className="text-gray-700">|</span>
+                          <button onClick={() => handleDeleteMember(teacher._id)} className="text-[10px] text-gray-500 hover:text-red-500 font-bold uppercase transition-colors">Delete</button>
+                        </div>
                       </div>
                     ))}
                     {members.filter(m => m?.category?.includes('Faculty')).length === 0 && <p className="text-xs text-gray-600 italic">Database Empty</p>}
@@ -322,7 +357,11 @@ const AdminDashboard = () => {
                             <p className="text-[9px] text-gray-500 uppercase tracking-widest">{student.role}</p>
                           </div>
                         </div>
-                        <button onClick={() => handleDeleteMember(student._id)} className="text-[10px] text-gray-600 hover:text-red-500 font-bold uppercase transition-colors">Delete</button>
+                        <div className="flex gap-2">
+                          <button onClick={() => handleEditClick(student)} className="text-[10px] text-blue-500 hover:text-blue-400 font-bold uppercase transition-colors">Edit</button>
+                          <span className="text-gray-700">|</span>
+                          <button onClick={() => handleDeleteMember(student._id)} className="text-[10px] text-gray-500 hover:text-red-500 font-bold uppercase transition-colors">Delete</button>
+                        </div>
                       </div>
                     ))}
                     {members.filter(m => m?.category?.includes('Core')).length === 0 && <p className="text-xs text-gray-600 italic">Database Empty</p>}

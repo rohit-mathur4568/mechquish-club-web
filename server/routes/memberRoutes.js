@@ -12,7 +12,7 @@ router.get('/all', async (req, res) => {
   }
 });
 
-// POST: Add new member (WITH ENGLISH LOGS 🕵️‍♂️)
+// POST: Add new member (
 router.post('/add', async (req, res) => {
   try {
     console.log("--- NEW MEMBER POST REQUEST ---");
@@ -37,6 +37,24 @@ router.delete('/:id', async (req, res) => {
     res.status(200).json({ message: "Member deleted successfully!" });
   } catch (error) {
     res.status(500).json({ message: "Error deleting member", error });
+  }
+});
+
+// PUT: Update an existing member
+router.put('/update/:id', async (req, res) => {
+  try {
+    console.log(`--- UPDATE REQUEST FOR MEMBER ID: ${req.params.id} ---`);
+    const updatedMember = await Member.findByIdAndUpdate(
+      req.params.id, 
+      req.body, 
+      { new: true } // Returns the updated document
+    );
+    console.log("Status: Successfully updated in MongoDB!");
+    res.status(200).json({ message: "Member updated successfully!", member: updatedMember });
+  } catch (error) {
+    console.log("Status: FAILED to update database.");
+    console.error(error);
+    res.status(500).json({ message: "Error updating member", error: error.message });
   }
 });
 
