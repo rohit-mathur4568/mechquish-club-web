@@ -30,10 +30,10 @@ const Login = () => {
       // Real Backend Logic (If Atlas is connected)
       const res = await axios.post(`http://localhost:5000/api/auth/login`, { email, password });
       
-    localStorage.setItem('token', res.data.token);
-    localStorage.setItem('role', res.data.user.role);
-    localStorage.setItem('user', JSON.stringify(res.data.user)); 
-    alert("SYSTEM_AUTHORIZED: Session Activated!");
+      localStorage.setItem('token', res.data.token);
+      localStorage.setItem('role', res.data.user.role);
+      localStorage.setItem('user', JSON.stringify(res.data.user)); 
+      alert("SYSTEM_AUTHORIZED: Session Activated!");
       
       // Role based redirection
       if (res.data.user.role === 'Admin' || res.data.user.role === 'Superadmin') {
@@ -45,10 +45,18 @@ const Login = () => {
     } catch (err) {
       // Temporary MOCK LOGIN (if backend is off)
       console.log("Backend failed, using Mock Login for testing");
+      
+      // MOCK ADMIN LOGIN
       if (email === 'admin@college.com' && password === 'admin123') {
+          // 👇 FAKE TOKEN ADDED HERE
+          localStorage.setItem('token', 'fake-admin-token-12345'); 
           localStorage.setItem('user', JSON.stringify({ name: 'Rohit', role: 'Superadmin' }));
           navigate('/admin-dashboard');
+          
+      // MOCK STUDENT LOGIN
       } else if (email === 'student@college.com' && password === 'student123') {
+          // 👇 FAKE TOKEN ADDED HERE
+          localStorage.setItem('token', 'fake-student-token-12345');
           localStorage.setItem('user', JSON.stringify({ name: 'Rahul', role: 'Student' }));
           navigate('/dashboard');
       } else {
