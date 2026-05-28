@@ -16,33 +16,63 @@ const AdminDashboard = () => {
   // ================= STATE: TEAM CMS =================
   const [members, setMembers] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [editId, setEditId] = useState(null); // Track which member is being edited
+  const [editId, setEditId] = useState(null); 
   const [formData, setFormData] = useState({
     name: '', role: '', category: 'CoreTeam', description: '', image: ''
   });
 
-  // Operational metrics for dashboard overview
-  const stats = [
-    { label: "Total Members", val: "450", color: "text-white" },
-    { label: "Ongoing Events", val: "02", color: "text-green-500" },
-    { label: "Current Status", val: "LIVE", color: "text-red-600" }, 
-    { label: "New Requests", val: "12", color: "text-yellow-500" } 
-  ];
+  // 1. STATE: LIVE DASHBOARD STATS 
+  const [dashboardStats, setDashboardStats] = useState({
+    totalMembers: 0,
+    ongoingEvents: 0,
+    newRequests: 0
+  });
+
+  // 2. FUNCTION: FETCH REAL-TIME STATS FROM DATABASE
+  const fetchStats = async () => {
+    try {
+      // Retrieve auth token for admin verification
+      const token = localStorage.getItem('token'); 
+      const res = await axios.get('http://localhost:5000/api/admin/stats', {
+        headers: { 'x-auth-token': token }
+      });
+      
+      // Update state with live database metrics
+      setDashboardStats({
+        totalMembers: res.data.totalMembers,
+        ongoingEvents: res.data.ongoingEvents,
+        newRequests: res.data.newRequests
+      });
+      console.log("System Stats synchronized successfully.");
+    } catch (error) {
+      console.error("Error fetching dashboard statistics:", error);
+    }
+  };
 
   // ================= API: TEAM CMS LOGIC =================
   const fetchMembers = async () => {
     try {
       const res = await axios.get('http://localhost:5000/api/members/all');
-      console.log("🔥 Data received from database:", res.data); 
+      console.log("Team data retrieved successfully from the database.", res.data); 
       setMembers(res.data);
     } catch (error) {
-      console.error("Error fetching members:", error);
+      console.error("Error fetching team members:", error);
     }
   };
 
+  // 3. EFFECT HOOK: Fetch initial data on component mount
   useEffect(() => {
     fetchMembers();
+    fetchStats(); // Triggering the stats API call
   }, []);
+
+  // 4. BINDING STATE TO DASHBOARD METRICS (Mock Data Replaced)
+  const stats = [
+    { label: "Total Members", val: dashboardStats.totalMembers, color: "text-white" },
+    { label: "Ongoing Events", val: dashboardStats.ongoingEvents < 10 ? `0${dashboardStats.ongoingEvents}` : dashboardStats.ongoingEvents, color: "text-green-500" },
+    { label: "Current Status", val: "LIVE", color: "text-red-600" }, 
+    { label: "New Requests", val: dashboardStats.newRequests < 10 ? `0${dashboardStats.newRequests}` : dashboardStats.newRequests, color: "text-yellow-500" } 
+  ];
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -70,10 +100,10 @@ const AdminDashboard = () => {
       image: member.image || ''
     });
     setEditId(member._id);
-    window.scrollTo({ top: 0, behavior: 'smooth' }); // Smooth scroll to top form
+    window.scrollTo({ top: 0, behavior: 'smooth' }); 
   };
 
-  // UPDATED FUNCTION: Handles both Add and Update
+  // UPDATED FUNCTION: Handles both Add and Update operations
   const handleAddMember = async (e) => {
     e.preventDefault();
     
@@ -103,22 +133,22 @@ const AdminDashboard = () => {
       if (error.response) {
         alert(`Error: ${error.response.data.message || error.response.statusText}`);
       } else {
-        alert("Server not responding. Please check if your backend is running.");
+        alert("Server not responding. Please verify backend connectivity.");
       }
-      console.error("Submit Error:", error);
+      console.error("Submission Error:", error);
     } finally {
       setLoading(false);
     }
   };
 
   const handleDeleteMember = async (id) => {
-    if (window.confirm("SYSTEM WARNING: Are you sure you want to permanently delete this member?")) {
+    if (window.confirm("SYSTEM WARNING: Are you sure you want to permanently delete this record?")) {
       try {
         await axios.delete(`http://localhost:5000/api/members/${id}`);
         fetchMembers(); 
       } catch (error) {
-        alert("Error occurred while deleting the member.");
-        console.error("Delete Error:", error);
+        alert("An error occurred while deleting the record.");
+        console.error("Deletion Error:", error);
       }
     }
   };
@@ -135,7 +165,7 @@ const AdminDashboard = () => {
       alert("Event successfully created!");
       setTitle(''); setDescription('');
     } catch (err) {
-      alert("Error occurred while creating the event.");
+      alert("An error occurred while creating the event.");
     }
   };
 

@@ -24,4 +24,5 @@ const userSchema = new mongoose.Schema({
     createdAt: { type: Date, default: Date.now }
 });
 
-module.exports = mongoose.model('User', userSchema);
+// Check if the model already exists in Mongoose models to prevent OverwriteModelError
+module.exports = mongoose.models.User || mongoose.model('User', userSchema);
